@@ -1,10 +1,21 @@
 var target = Argument("target", "Default");
 
-Task("Default")
+Task("Unit")
   .Does(() =>
 {
-  Information("Hello World from Concourse");
+  Information("Running Unit tests");
   //throw new Exception(String.Format("Release notes are missing"));
 });
+
+Task("Integration")
+  .Does(() =>
+{
+  Information("Running Integration tests");
+  //throw new Exception(String.Format("Release notes are missing"));
+});
+
+Task("Default")
+    .IsDependentOn("Unit")
+    .IsDependentOn("Integration");
 
 RunTarget(target);

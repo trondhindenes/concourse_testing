@@ -1,0 +1,10 @@
+---
+platform: windows
+inputs:
+  - name: code_from_git
+outputs:
+  - name: built-project
+run:
+  path: "powershell"
+  args: ["-file","build.ps1","-target","unit"]
+  dir: "./code_from_git"
