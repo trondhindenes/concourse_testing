@@ -13,13 +13,13 @@ jobs:
   - get: code_from_git
     trigger: true
   - task: build_with_cake
-    file: code_from_git/ci/cake_build_unit.yml
+    file: code_from_git/ci/tasks/cake_build_unit.yml
 - name: clone and build (integrationtests tests)
   plan:
   - get: code_from_git
     trigger: true
   - task: build_with_cake
-    file: code_from_git/ci/cake_build_integration.yml
+    file: code_from_git/ci/tasks/cake_build_integration.yml
 - name: deploy
   serial: true
   plan:
@@ -27,7 +27,7 @@ jobs:
       trigger: true
       passed: ["clone and build (unit tests)","clone and build (integrationtests tests)"]
     - task: deploy
-      #params: thething: {{ some_secret }}
+      params: { thething:  some_secret }
       config:
         platform: windows
         run:
