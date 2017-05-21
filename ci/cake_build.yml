@@ -1,0 +1,8 @@
+config:
+  inputs:
+    - name: code_from_git
+  platform: windows
+  run:
+    path: "powershell"
+    args: ["-file","build.ps1"]
+    dir: "./code_from_git"
