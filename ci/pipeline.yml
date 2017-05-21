@@ -1,0 +1,42 @@
+resources:
+- name: code_from_git
+  type: git
+  source:
+    uri: https://github.com/trondhindenes/concourse_testing.git
+    branch: master
+    disable_ci_skip: true
+
+
+jobs:
+- name: clone and build (unit tests)
+  plan:
+  - get: code_from_git
+    trigger: true
+  - task: build_with_cake
+    file: code_from_git/ci/cake_build_unit.yml
+- name: clone and build (integrationtests tests)
+  plan:
+  - get: code_from_git
+    trigger: true
+  - task: build_with_cake
+    file: code_from_git/ci/cake_build_integration.yml
+- name: deploy
+  serial: true
+  plan:
+    - get: code_from_git
+      trigger: true
+      passed: ["clone and build (unit tests)","clone and build (integrationtests tests)"]
+    - task: deploy
+      #params: thething: {{ some_secret }}
+      config:
+        platform: windows
+        run:
+          path: powershell
+          args: ["-command",'ls env']
+  
+#  - task: say-hello
+#    config:
+#      platform: windows
+#      run:
+#        path: powershell
+#        #args: ["-c ipconfig"]
